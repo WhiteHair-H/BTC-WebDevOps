@@ -7,7 +7,9 @@
 </head>
 <% var read=rows[0]; %>
 
-  <body>
+<a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>/edit">EDIT</a>
+<a class="btn btn-primary" href="/boards">LIST</a>
+<body>
     <%- include('../partials/nav') %>
       <h1>
         <%= title %>
@@ -46,11 +48,6 @@
         <tr>
           <td colspan="6" height="200">
             <%=read.bt_text%>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="6">
-            <a href="/boards"> 목록 </a>
           </td>
         </tr>
       </table>
