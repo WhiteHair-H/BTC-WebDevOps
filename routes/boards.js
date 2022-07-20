@@ -66,7 +66,7 @@ router.get('/show/:bd_no', function (req, res) {
 })
 
 // GET 게시판에서 새로 내용을 작성하는 함수
-router.get('/new', function (req, res){
+router.get('/new', function (req, res) {
     res.render('boards/new');
 })
 
@@ -79,79 +79,80 @@ router.post('/new', function (req, res) {
     var title = req.body.title;
     var body = req.body.body;
 
-    connection.beginTransaction(function(err){
-        if(err) console.log(err);
-        
+    connection.beginTransaction(function (err) {
+        if (err) console.log(err);
+
         connection.query('insert into boards(bd_no,bd_writer,bd_title,bt_text,bd_date,bd_hit) values(?,?,?,?,now(),?)'
-        ,[bd_no, bd_writer , title , body, 0 , 0]
-        ,function (err){
-            if(err){
-                console.log(err);
-                connection.rollback(function(){
-                    console.error('rollback error1!!');
-                })
-            }
-            connection.query('select bd_no as idx from boards;', function(err, rows){
-                if(err){
+            , [bd_no, bd_writer, title, body, 0, 0]
+            , function (err) {
+                if (err) {
                     console.log(err);
-                    connection.rollback(function(){
-                        console.error('rollback error111!!');
+                    connection.rollback(function () {
+                        console.error('rollback error1!!');
                     })
                 }
-                else{
-                    connection.commit(function (err){
-                        if(err) console.log(err);
-                        console.log("row : " + rows);
-                        var idx = rows[0].idx;
-                        res.redirect('/boards');
-                    })
-                }
+                connection.query('select bd_no as idx from boards;', function (err, rows) {
+                    if (err) {
+                        console.log(err);
+                        connection.rollback(function () {
+                            console.error('rollback error111!!');
+                        })
+                    }
+                    else {
+                        connection.commit(function (err) {
+                            if (err) console.log(err);
+                            console.log("row : " + rows);
+                            var idx = rows[0].idx;
+                            res.redirect('/boards');
+                        })
+                    }
+                })
             })
-        })
     })
 })
 
 // GET 게시판의 내용을 수정하기 위한 페이지로 이동
-router.get('/show/:bd_no/edit', function (req, res){
+router.get('/show/:bd_no/edit', function (req, res) {
     var bd_no = req.params.bd_no;
 
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
-    connection.query('select bd_no,bd_writer,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards where bd_no=?', [bd_no], function (err, rows) {
-        if (err) {
-            console.log(err);
-            connection.rollback(function () {
-                console.error('rollback error!!');
-            })
-        }
-        else {
-            connection.commit(function (err) {
-                if (err) console.log(err);
-                console.log('show row : ' + rows);
-                res.render('boards/edit', { title: rows[1], rows: rows });
-            })
-        }
+        connection.query('select bd_no,bd_writer,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards where bd_no=?', [bd_no], function (err, rows) {
+            if (err) {
+                console.log(err);
+                connection.rollback(function () {
+                    console.error('rollback error!!');
+                })
+            }
+            else {
+                connection.commit(function (err) {
+                    if (err) console.log(err);
+                    console.log('show row : ' + rows);
+                    res.render('boards/edit', { title: rows[1], rows: rows });
+                })
+            }
+        })
     })
-})
 })
 
 // POST 게시판의 내용을 수정하기 위한 함수
 // 현재 구현하는 중
-router.post('/update', function(req, res){
+router.post('/update', function (req, res) {
     // 제목과 내용 변수값 저장
+    var num = req.body.bd_no
     var title = req.body.title
-    var bd_text = req.body.bd_text
-    var bd_writer = req.body.bd_writer
-    
-    connection.beginTransaction(function(err){
-        if(err) console.log(err);
+    var text = req.body.bd_text
 
-    connection.query('update boards set bd_title=? , bt_text=? where bd_writer=?',[title, bd_text, bd_writer], function(err ,result){
-        if(err) throw err;
-        console.log('수정한 결과값 = ', result);
-        res.redirect('/boards');
+    connection.beginTransaction(function (err) {
+        if (err) console.log(err);
+        
+        connection.query('update boards set bd_title=? , bt_text=? where bd_no=?', [title, text, num], function (err, result) {
+            if (err) throw err;
+            console.log(num, title, text);
+            console.log('수정한 결과값 = ', result);
+            res.redirect('/boards');
+        })
     })
-})
 })
 
 module.exports = router;
