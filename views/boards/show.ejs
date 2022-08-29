@@ -7,9 +7,15 @@
 </head>
 <% var read=rows[0]; %>
 
-<a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>/edit">EDIT</a>
-<a class="btn btn-primary" href="/boards">LIST</a>
-<body>
+  <form action="/boards/show/<%=read.bd_no%>/delete" method="post">
+    <button type="submit" class="btn btn-primary">DELETE</button>
+    <a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>/edit">EDIT</a>
+    <a class="btn btn-primary" href="/boards">LIST</a>
+  </form>
+
+
+
+  <body>
     <%- include('../partials/nav') %>
       <h1>
         <%= title %>

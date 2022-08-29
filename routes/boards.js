@@ -21,10 +21,12 @@ connection.connect();
 // 게시판 첫 화면에서 DB값 띄우기
 // Boards/index
 router.get('/', function (req, res, next) {
+
+
     connection.query('select bd_no,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards order by bd_no desc', function (err, rows) {
         if (err) console.log(err);        // 만약 에러값이 존재한다면 로그에 표시합니다.
         else {
-            console.log(JSON.stringify(rows));
+            //console.log(JSON.stringify(rows));
             res.render('boards/index', { result: rows }); // view 디렉토리에 있는 boards 파일로 이동합니다.
 
         }
@@ -137,19 +139,37 @@ router.get('/show/:bd_no/edit', function (req, res) {
 
 // POST 게시판의 내용을 수정하기 위한 함수
 // 현재 구현하는 중
-router.post('/update', function (req, res) {
+router.post('/show/:bd_no/edit', function (req, res) {
     // 제목과 내용 변수값 저장
-    var num = req.body.bd_no
     var title = req.body.title
     var text = req.body.bd_text
+    var bd_no = req.params.bd_no
 
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
         
-        connection.query('update boards set bd_title=? , bt_text=? where bd_no=?', [title, text, num], function (err, result) {
+        connection.query('UPDATE boards SET bd_title=? , bt_text=? where bd_no=?', [title, text, bd_no], function (err, rows) {
             if (err) throw err;
-            console.log(num, title, text);
-            console.log('수정한 결과값 = ', result);
+            console.log(bd_no ,title, text);
+            console.log('수정한 결과값 = ', rows);
+            res.redirect('/boards');
+        })
+    })
+})
+
+// 게시판 글 삭제
+// Delete
+router.post('/show/:bd_no/delete' , function(req, res){
+
+    var num = req.params.bd_no
+
+    connection.beginTransaction(function (err){
+        if(err) console.log(err);
+
+        connection.query('DELETE FROM boards WHERE bd_no=?',[num] , function(err, rows){
+            if(err ) throw err;
+            console.log(num)
+            console.log('삭제한 결과값 = ' , rows);
             res.redirect('/boards');
         })
     })
