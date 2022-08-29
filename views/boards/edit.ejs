@@ -6,46 +6,55 @@
 
 </head>
 <% var read=rows[0]; %>
-  <a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>">Back</a>
-  <a class="btn btn-primary" href="/boards">LIST</a>
+
 
   <body>
     <%- include('../partials/nav') %>
-      <form action="/boards/show/<%=read.bd_no%>/edit" method="post">
-        <h1>
-          <%= title %>
-        </h1>
-        <table border="2">
-          <tr>
-            <th>번호</th>
-            <td>
-              <%=read.bd_no%>
-            </td>
-          </tr>
-          <tr>
-            <th>글쓴이</th>
-            <td>
-              <%=read.bd_writer%>
-            </td>
-          </tr>
-          <tr>
-            <th>제목</th>
-            <td colspan="5">
-              <input type="text" name="title" value="<%=read.bd_title%>">
-            </td>
-          </tr>
-          <tr>
-            <th>내용</th>
-            <td colspan="6" height="200">
-              <input type="text" name="bd_text" value="<%=read.bt_text%>" >
-            </td>
-          </tr>
-        </table>
+
+      <div class="container mb-3">
+
+        <nav aria-label="breadcrumb">
+          <!-- 1 -->
+          <ol class="breadcrumb p-1 pl-2 pr-2">
+            <li class="breadcrumb-item"><a href="/">홈</a></li>
+            <li class="breadcrumb-item"><a href="/boards">게시판</a></li>
+          </ol>
+        </nav>
+
+        <form action="/boards/show/<%=read.bd_no%>/edit" method="post">
+          <h1>
+            <%= title %>
+          </h1>
+          <table border="2">
+            <tr>
+              <th>번호</th>
+              <td>
+                <%=read.bd_no%>
+              </td>
+            </tr>
+            <tr>
+              <th>글쓴이</th>
+              <td>
+                <%=read.bd_writer%>
+              </td>
+            </tr>
+            <tr>
+              <th>제목</th>
+              <td colspan="5">
+                <input type="text" name="title" value="<%=read.bd_title%>">
+              </td>
+            </tr>
+            <tr>
+              <th>내용</th>
+              <td colspan="6" height="200">
+                <input type="text" name="bd_text" value="<%=read.bt_text%>">
+              </td>
+            </tr>
+          </table>
+        </form>
+        <a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>">뒤로</a>
         <button type="submit" class="btn btn-primary">수정</button>
-      </form>
-
-
-
+      </div>
   </body>
 
 </html>

@@ -13,8 +13,6 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-
-// 게시판 첫 화면에서 DB값 띄우기
 // membership/index
 router.get('/', function (req, res, next) {
     res.render('membership/login'); // view 디렉토리에 있는 boards 파일로 이동합니다.

@@ -6,58 +6,64 @@
 
 </head>
 <% var read=rows[0]; %>
+  <div class="container mb-3">
 
-  <form action="/boards/show/<%=read.bd_no%>/delete" method="post">
-    <button type="submit" class="btn btn-primary">DELETE</button>
-    <a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>/edit">EDIT</a>
-    <a class="btn btn-primary" href="/boards">LIST</a>
-  </form>
+    <nav aria-label="breadcrumb">
+      <!-- 1 -->
+      <ol class="breadcrumb p-1 pl-2 pr-2">
+        <li class="breadcrumb-item"><a href="/">홈</a></li>
+        <li class="breadcrumb-item"><a href="/boards">게시판</a></li>
+      </ol>
+    </nav>
 
+    <body>
+      <%- include('../partials/nav') %>
+        <h1>
+          <%= title %>
+        </h1>
+        <table border="2">
+          <tr>
+            <th>번호</th>
+            <td>
+              <%=read.bd_no%>
+            </td>
+            <th>조회수</th>
+            <td>
+              <%=read.bd_hit%>
+            </td>
+            <th>글쓴이</th>
+            <td>
+              <%=read.bd_writer%>
+            </td>
+          </tr>
+          <tr>
+            <th>제목</th>
+            <td colspan="5">
+              <%=read.bd_title%>
+            </td>
+          </tr>
+          <tr>
+            <th>작성일</th>
+            <td colspan="2">
+              <%=read.bd_date%>
+            </td>
+            <th>수정일</th>
+            <td colspan="2">
+              <%=read.moddate%>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="6" height="200">
+              <%=read.bt_text%>
+            </td>
+          </tr>
+        </table>
 
-
-  <body>
-    <%- include('../partials/nav') %>
-      <h1>
-        <%= title %>
-      </h1>
-      <table border="2">
-        <tr>
-          <th>번호</th>
-          <td>
-            <%=read.bd_no%>
-          </td>
-          <th>조회수</th>
-          <td>
-            <%=read.bd_hit%>
-          </td>
-          <th>글쓴이</th>
-          <td>
-            <%=read.bd_writer%>
-          </td>
-        </tr>
-        <tr>
-          <th>제목</th>
-          <td colspan="5">
-            <%=read.bd_title%>
-          </td>
-        </tr>
-        <tr>
-          <th>작성일</th>
-          <td colspan="2">
-            <%=read.bd_date%>
-          </td>
-          <th>수정일</th>
-          <td colspan="2">
-            <%=read.moddate%>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="6" height="200">
-            <%=read.bt_text%>
-          </td>
-        </tr>
-      </table>
-
+        <form action="/boards/show/<%=read.bd_no%>/delete" method="post">
+          <button type="submit" class="btn btn-primary">삭제</button>
+          <a class="btn btn-primary" href="/boards/show/<%=read.bd_no%>/edit">수정</a>
+        </form>
+  </div>
   </body>
 
 </html>
