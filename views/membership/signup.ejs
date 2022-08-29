@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <%- include('../partials/head') %>
+</head>
+
+<body>
+    <%- include('../partials/nav') %>
+    <!-- Navigation Start-->
+    
+    <!-- Navigation END-->
+    <header class="login_header">
+        <div class="container">
+            <form action="/membership/usersignup" method="post">
+                <div class="row mb-3">
+                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="email" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="email">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="Phone" class="col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="phone">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="Password" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="password">
+                    </div>
+                </div>
+                <fieldset class="row mb-3">
+                    <legend class="col-form-label col-sm-2 pt-0">Company</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="company" value="Bespinglobal" checked>
+                            <label class="form-check-label" for="gridRadios1">
+                                Bespinglobal
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="company" value="BTC">
+                            <label class="form-check-label" for="gridRadios2">
+                                BTC
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn btn-primary">회원가입완료</button>
+                <a class="btn btn-primary" href="/membership">뒤로</a>
+            </form>
+        </div>
+    </header>
+    <!-- <script src="../models/pages.js"></script> -->
+</body>
+
+</html>

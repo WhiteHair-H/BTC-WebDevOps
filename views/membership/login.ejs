@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <%- include('../partials/head') %>
+</head>
+
+<body>
+    <!-- Navigation Start-->
+    <%- include('../partials/nav') %>
+        <!-- Navigation END-->
+        <header class="login_header">
+            <div class="container">
+                <form action="membership/login_post" method="post">
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="email">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                    </div>
+                    <fieldset class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Company</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="company" value="Bespinglobal"
+                                    checked>
+                                <label class="form-check-label" for="gridRadios1">
+                                    Bespinglobal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="company" value="BTC">
+                                <label class="form-check-label" for="gridRadios2">
+                                    BTC
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                        <!-- href 사용안함 -> 자바스크립트 사용함 href="/login/membership"-->
+                        <a class="btn btn-primary" href="membership/signup">회원가입</a>
+                    </div>
+                </form>
+            </div>
+        </header>
+        <!--js파일연결-->
+
+</body>
+
+</html>

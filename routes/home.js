@@ -14,8 +14,8 @@ router.get('/rec_board', function(req, res){
 router.get('/restaurant', function(req, res){
     res.render('home/restaurant')
 })
-router.get('/login', function(req, res){
-    res.render('home/login')
+router.get('/review', function(req, res){
+    res.render('home/review')
 })
 
 module.exports = router;
