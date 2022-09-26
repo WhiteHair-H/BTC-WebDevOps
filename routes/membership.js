@@ -5,9 +5,9 @@ var mysql = require('mysql'); //mysql 모듈을 로딩.
 // DB settings
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
+    host: 'btcappdb.mysql.database.azure.com',
     user: 'dana',
-    password: '1234',
+    password: '~1q2w3e4r5t6y',
     database: 'btcweb'
 });
 

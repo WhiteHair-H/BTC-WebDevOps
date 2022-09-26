@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b743e294-87c9-4e47-b9c2-57ee647de41c/appservices/subscriptions/b743e294-87c9-4e47-b9c2-57ee647de41c/resourceGroups/helloapp-rg/providers/Microsoft.Web/sites/BTCWebApp",
+    "appService.deploySubpath": "."
+}

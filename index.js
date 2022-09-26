@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 const path = require('path');
 var methodOverride = require('method-override');
 var app = express();
-var port = 8001;
+var port = 80;
 
 var cookieParser = require("cookie-parser")
 var expressSession = require("express-session")
