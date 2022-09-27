@@ -8,7 +8,6 @@ const ejs = require('ejs');
 
 
 // DB settings
-var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'btcappdb.mysql.database.azure.com',
     user: 'dana',
@@ -23,7 +22,7 @@ connection.connect();
 router.get('/', function (req, res, next) {
 
 
-    connection.query('select bd_no,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards order by bd_no desc', function (err, rows) {
+    connection.query('select bd_no,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from Boards order by bd_no desc', function (err, rows) {
         if (err) console.log(err);        // 만약 에러값이 존재한다면 로그에 표시합니다.
         else {
             //console.log(JSON.stringify(rows));
@@ -41,14 +40,14 @@ router.get('/show/:bd_no', function (req, res) {
 
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
-        connection.query('update boards set bd_hit=bd_hit+1 where bd_no=?', [bd_no], function (err) {
+        connection.query('update Boards set bd_hit=bd_hit+1 where bd_no=?', [bd_no], function (err) {
             if (err) {
                 console.log(err);
                 connection.rollback(function () {
                     console.error('rollback error!!');
                 })
             }
-            connection.query('select bd_no,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards where bd_no=?', [bd_no], function (err, rows) {
+            connection.query('select bd_no,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from Boards where bd_no=?', [bd_no], function (err, rows) {
                 if (err) {
                     console.log(err);
                     connection.rollback(function () {
@@ -84,7 +83,7 @@ router.post('/new', function (req, res) {
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
 
-        connection.query('insert into boards(bd_no,bd_writer,bd_title,bt_text,bd_date,bd_hit) values(?,?,?,?,now(),?)'
+        connection.query('insert into Boards(bd_no,bd_writer,bd_title,bt_text,bd_date,bd_hit) values(?,?,?,?,now(),?)'
             , [bd_no, bd_writer, title, body, 0, 0]
             , function (err) {
                 if (err) {
@@ -93,7 +92,7 @@ router.post('/new', function (req, res) {
                         console.error('rollback error1!!');
                     })
                 }
-                connection.query('select bd_no as idx from boards;', function (err, rows) {
+                connection.query('select bd_no as idx from Boards;', function (err, rows) {
                     if (err) {
                         console.log(err);
                         connection.rollback(function () {
@@ -119,7 +118,7 @@ router.get('/show/:bd_no/edit', function (req, res) {
 
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
-        connection.query('select bd_no,bd_writer,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from boards where bd_no=?', [bd_no], function (err, rows) {
+        connection.query('select bd_no,bd_writer,bd_title,bd_hit,DATE_FORMAT(bd_date, "%Y/%m/%d %T") as moddate, DATE_FORMAT(bd_date, "%Y/%m/%d %T") as bd_date, bt_text from Boards where bd_no=?', [bd_no], function (err, rows) {
             if (err) {
                 console.log(err);
                 connection.rollback(function () {
@@ -148,7 +147,7 @@ router.post('/show/:bd_no/edit', function (req, res) {
     connection.beginTransaction(function (err) {
         if (err) console.log(err);
         
-        connection.query('UPDATE boards SET bd_title=? , bt_text=? where bd_no=?', [title, text, bd_no], function (err, rows) {
+        connection.query('UPDATE Boards SET bd_title=? , bt_text=? where bd_no=?', [title, text, bd_no], function (err, rows) {
             if (err) throw err;
             console.log(bd_no ,title, text);
             console.log('수정한 결과값 = ', rows);
@@ -166,7 +165,7 @@ router.post('/show/:bd_no/delete' , function(req, res){
     connection.beginTransaction(function (err){
         if(err) console.log(err);
 
-        connection.query('DELETE FROM boards WHERE bd_no=?',[num] , function(err, rows){
+        connection.query('DELETE FROM Boards WHERE bd_no=?',[num] , function(err, rows){
             if(err ) throw err;
             console.log(num)
             console.log('삭제한 결과값 = ' , rows);

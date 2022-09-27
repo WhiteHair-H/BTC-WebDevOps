@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql'); //mysql 모듈을 로딩.
 
 // DB settings
 var mysql = require('mysql');
@@ -45,13 +44,13 @@ router.post('/usersignup', function (req, res) {
     }
 
 
-    connection.query('SELECT * FROM user WHERE user_email = ?', [email], function (error, results, fields) {
+    connection.query('SELECT * FROM User WHERE user_email = ?', [email], function (error, results, fields) {
         if (results.length == 0) {
             res.writeHead(200, { 'Content-Type': 'text/html;charset=UTF-8' });
             res.write("<script>alert('회원가입성공')</script>");
             console.log(results);
             
-            connection.query('insert into user(user_nickname,user_email,user_phone,user_pw,user_company) values(?,?,?,?,?)'
+            connection.query('insert into User(user_nickname,user_email,user_phone,user_pw,user_company) values(?,?,?,?,?)'
             , [name , email, phone, pass, com]
             , function (error, results, fields) {
                 // DB 쿼리 작성과 에러가 발생하면 에러 로그 출력
@@ -85,7 +84,7 @@ router.post('/login_post', function (req, res) {
     // 에러가 발생하면 에러 로그를 발생시킨 뒤
     // 결과값의 길이가 0보다 클 경우 로그인이 되도록 구성
     if (email && pass) {
-        connection.query('SELECT * FROM user WHERE user_email = ? AND user_pw = ? AND user_company = ?', [email, pass, com], function (error, results, fields) {
+        connection.query('SELECT * FROM User WHERE user_email = ? AND user_pw = ? AND user_company = ?', [email, pass, com], function (error, results, fields) {
             if (error) throw error;
             if (results.length > 0) {
                 //req.session.loggedin = true;
