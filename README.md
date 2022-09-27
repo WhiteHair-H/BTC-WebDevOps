@@ -1,8 +1,7 @@
-# BTC-WebDevOps
+# 3Tier 개발
+## APache + Node + MySQL
 
-## Now
-
-### Resource Settings
+## Resource Settings
 <li>Windows</li>
 <li>Azure VM 3개(Web, Was, DB)</li>
 
