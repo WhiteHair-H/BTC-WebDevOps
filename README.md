@@ -20,5 +20,5 @@
 
 ## 구조
 <p align='left'>
-    <img src="https://github.com/WhiteHair-H/BTC-WebDevOps/blob/main/infra/Azure%2Bnode(3Tier).png" width="40%" height="40%"/>
+    <img src="https://github.com/WhiteHair-H/BTC-WebDevOps/blob/main/infra/Azure%2Bnode(3Tier).png" width="70%" height="70%"/>
 </p>
