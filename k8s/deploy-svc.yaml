@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whiteaksdemo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: white-aks-app
+  template:
+    metadata:
+      labels:
+        app: white-aks-app
+    spec:
+      containers:
+        - name: white-aks-demo
+          image: whiteacrdemo.azurecr.io/web:latest
+          ports:
+            - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: white-aks-app
+spec:
+  ports:
+    - name: http-port
+      port: 80
+      targetPort: 8081
+  selector:
+    app: white-aks-app
+  type: LoadBalancer
