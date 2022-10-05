@@ -1,16 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-// DB settings
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: 'btcappdb.mysql.database.azure.com',
-    user: 'dana',
-    password: '~1q2w3e4r5t6y',
-    database: 'btcweb'
-});
-
-connection.connect();
+const connection = require('../models/mysql');
 
 // membership/index
 router.get('/', function (req, res, next) {

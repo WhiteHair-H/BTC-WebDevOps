@@ -22,13 +22,13 @@ resource "azurerm_subnet" "Was_subnet" {
   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
 }
 
-# DB_subnet
-resource "azurerm_subnet" "DB_subnet" {
-  name = "DB_subnet"
-  address_prefixes = ["192.168.30.0/24"]
-  virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
-  resource_group_name = azurerm_resource_group.Three_Tier_rg.name
-}
+# # DB_subnet
+# resource "azurerm_subnet" "DB_subnet" {
+#   name = "DB_subnet"
+#   address_prefixes = ["192.168.30.0/24"]
+#   virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
+#   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
+# }
 
 resource "azurerm_network_security_group" "web_sg" {
   name = "web_sg"
@@ -43,7 +43,7 @@ resource "azurerm_network_security_group" "web_sg" {
     protocol = "Tcp"
     source_port_range = "*"
     destination_port_range = "22"
-    source_address_prefix = "20.214.143.44"
+    source_address_prefix = "20.194.109.211"
     destination_address_prefix = "*"
   }
 

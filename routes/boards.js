@@ -1,19 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql'); //mysql 모듈을 로딩.
-const ejs = require('ejs');
-
-
-// TODO : 게시판의 내용을 수정하는 함수와 게시판의 데이터를 삭제하는 함수 구현해야함
-
-
-// DB settings
-var connection = mysql.createConnection({
-    host: 'btcappdb.mysql.database.azure.com',
-    user: 'dana',
-    password: '~1q2w3e4r5t6y',
-    database: 'btcweb'
-});
+const connection = require('../models/mysql');
 
 connection.connect();
 
