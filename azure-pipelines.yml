@@ -1,0 +1,58 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  #batch: true
+  branches:
+    include:
+    - main
+    exclude:
+    - dev
+  paths:
+    include:
+    - src/main/*
+    #- k8s/deploy-svc.yaml
+    exclude:
+    - README.md
+    - k8s/deploy-svc.yaml
+
+steps:
+- task: Maven@3
+  displayName: 'Maven Build'
+
+- task: Docker@2
+  displayName: 'Docker Build'
+  inputs:
+    containerRegistry: 'SvcConnAcr'
+    repository: 'appmod-demo4btc'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      latest
+
+- task: Docker@2
+  displayName: 'Docker Push'
+  inputs:
+    containerRegistry: 'SvcConnAcr'
+    repository: 'appmod-demo4btc'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      latest
+
+- task: Bash@3
+  displayName: 'Tag Update'
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i "s/latest/$(Build.BuildId)/g" k8s/deploy-svc.yaml'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Build Artifact Publish'
+  inputs:
+    PathtoPublish: 'k8s/deploy-svc.yaml'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

@@ -1,0 +1,7 @@
+FROM node:latest
+RUN mkdir -p /usr/src/btcweb
+WORKDIR /usr/src/btcweb
+COPY . /usr/src/btcweb
+RUN npm install mysql express body-parser method-override cookie-parser express-session ejs
+EXPOSE 8081
+CMD node index.js
