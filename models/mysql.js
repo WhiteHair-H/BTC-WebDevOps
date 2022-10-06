@@ -1,10 +1,10 @@
 // DB settings
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'dana',
-    password: 'Test1234!',
-    database: 'btcweb'
+    host: 'DBHostAddress',
+    user: 'DBUser',
+    password: 'DBPassword',
+    database: 'DBName'
 });
 
 module.exports = connection;
