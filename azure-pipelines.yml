@@ -4,31 +4,17 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-  #batch: true
-  branches:
-    include:
-    - main
-    exclude:
-    - dev
-  paths:
-    include:
-    - src/main/*
-    #- k8s/deploy-svc.yaml
-    exclude:
-    - README.md
-    - k8s/deploy-svc.yaml
+- main
 
 steps:
-- task: Maven@3
-  displayName: 'Maven Build'
 
 - task: Docker@2
   displayName: 'Docker Build'
   inputs:
     containerRegistry: 'SvcConnAcr'
-    repository: 'appmod-demo4btc'
+    repository: 'white-cicd'
     command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
+    Dockerfile: 'DockerFile'
     tags: |
       $(Build.BuildId)
       latest
@@ -37,9 +23,9 @@ steps:
   displayName: 'Docker Push'
   inputs:
     containerRegistry: 'SvcConnAcr'
-    repository: 'appmod-demo4btc'
+    repository: 'white-cicd'
     command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
+    Dockerfile: 'DockerFile'
     tags: |
       $(Build.BuildId)
       latest
