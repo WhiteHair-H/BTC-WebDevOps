@@ -131,7 +131,7 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: WHATAP_LICENSE
-              value: "x4p54202ncmq6-x3dkiq1ld2a1vc-z6s2p4q1e3m9r3"
+              value: "x4p6122r9kqln-z7up70folvjfp6-z6qss6k9lmfl2i"
             - name: WHATAP_HOST
               value: "13.124.11.223/13.209.172.35"
             - name: WHATAP_PORT
@@ -243,7 +243,7 @@ spec:
           command: ['/bin/entrypoint.sh']
           env:
             - name: WHATAP_LICENSE
-              value: "x4p54202ncmq6-x3dkiq1ld2a1vc-z6s2p4q1e3m9r3"
+              value: "x4p6122r9kqln-z7up70folvjfp6-z6qss6k9lmfl2i"
             - name: WHATAP_HOST
               value: "13.124.11.223/13.209.172.35"
             - name: WHATAP_PORT
