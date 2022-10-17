@@ -15,6 +15,15 @@ spec:
       containers:
         - name: btc-was-server
           image: pddana/btcwask8s:latest
+          env:
+          - name: DBHostAddress
+            value: {DBHostAddress}
+          - name: DBUser
+            value: {DBUser}
+          - name: DBPassword
+            value: {DBPassword}
+          - name: DBName
+            value: {DBName}
           ports:
             - containerPort: 8081
 ---
