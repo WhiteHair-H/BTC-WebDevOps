@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: whiteaksdemo
+  name: btc-was-server
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: white-aks-app
+      app: btc-was-server
   template:
     metadata:
       labels:
-        app: white-aks-app
+        app: btc-was-server
     spec:
       containers:
-        - name: white-aks-demo
-          image: whiteacrdemo.azurecr.io/web:latest
+        - name: btc-was-server
+          image: pddana/btcwask8s:latest
           ports:
             - containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: white-aks-app
+    name: btc-was-service
 spec:
   ports:
     - name: http-port
-      port: 80
+      port: 8081
       targetPort: 8081
   selector:
-    app: white-aks-app
+    app: btc-was-server
   type: LoadBalancer
