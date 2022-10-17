@@ -4,3 +4,7 @@ output "web_public" {
     azurerm_virtual_machine.Web_vm
   ]
 }
+
+output "was_private" {
+  value = azurerm_network_interface.Was_ni.private_ip_address
+}

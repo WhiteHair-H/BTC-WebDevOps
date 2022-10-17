@@ -1,0 +1,79 @@
+# 변수 선언
+//ACR_NAME은 각자 고유한 이름으로 할당
+ACR_NAME=whiteacrdemo
+RESOURCE_GROUP=white-rg-demo4btc-cicd
+REGION_NAME=japaneast
+ 
+# Resource Group 생성
+az group create \
+--resource-group $RESOURCE_GROUP \
+--location $REGION_NAME
+ 
+# ACR 생성
+az acr create \
+--resource-group $RESOURCE_GROUP \
+--location $REGION_NAME \
+--name $ACR_NAME \
+--sku Standard
+ 
+# 생성 결과 확인
+az acr list -o table
+
+# 변수 선언
+//AKS_NAME은 각자 고유한 이름으로 할당
+AKS_CLUSTER_NAME=whiteaksdemo
+VNET_NAME=aks-vnet
+SUBNET_NAME=aks-subnet
+ 
+# VNET 생성
+az network vnet create \
+--resource-group $RESOURCE_GROUP \
+--location $REGION_NAME \
+--name $VNET_NAME \
+--address-prefixes 10.0.0.0/8 \
+--subnet-name $SUBNET_NAME \
+--subnet-prefixes 10.240.0.0/16
+ 
+# SUBNET 생성
+az network vnet subnet show \
+--resource-group $RESOURCE_GROUP \
+--vnet-name $VNET_NAME \
+--name $SUBNET_NAME \
+--query id -o tsv
+
+SUBNET_ID=위에서 나온 Subnetid 입력
+
+# AKS 최신 Version 정보 획득
+VERSION=$(az aks get-versions \
+--location $REGION_NAME \
+--query 'orchestrators[?!isPreview] | [-1].orchestratorVersion' \
+--output tsv)
+ 
+# AKS 생성 (약 3분 소요)
+az aks create \
+--resource-group $RESOURCE_GROUP \
+--name $AKS_CLUSTER_NAME \
+--vm-set-type VirtualMachineScaleSets \
+--node-count 2 \
+--load-balancer-sku standard \
+--location $REGION_NAME \
+--kubernetes-version 1.23.8 \
+--network-plugin azure \
+--vnet-subnet-id $SUBNET_ID \
+--service-cidr 10.2.0.0/24 \
+--dns-service-ip 10.2.0.10 \
+--docker-bridge-address 172.17.0.1/16 \
+--enable-managed-identity \
+--generate-ssh-keys
+ 
+# AKS 자격증명 획득
+az aks get-credentials \
+--resource-group $RESOURCE_GROUP \
+--name $AKS_CLUSTER_NAME
+ 
+# AKS 노드 정보 확인
+kubectl get node
+
+az aks update -n $AKS_CLUSTER_NAME -g $RESOURCE_GROUP --attach-acr $ACR_NAME
+
+
