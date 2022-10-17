@@ -1,32 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: btc-db-server
   labels:
-    app: mysql
+    app: btc-db-server
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: mysql
+      app: btc-db-server
   template:
     metadata:
       labels:
-        app: mysql
+        app: btc-db-server
     spec:
       containers:
-      - name: mysql
-        image: mysql:8.0.26
+      - name: btc-db-server
+        image: pddana/btcdbdocker
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: Test1234!
-        - name: MYSQL_DATABASE 
+        - name: MYSQL_DATABASE
           value: btcweb
         - name: MYSQL_USER
           value: dana
         - name: MYSQL_PASSWORD
           value: Test1234!
-        - name: MYSQL_ROOT_HOST
-          value: '%'  
         ports:
         - containerPort: 3306
