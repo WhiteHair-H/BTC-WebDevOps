@@ -7,7 +7,6 @@ dotenv.config({
     path:path.join(__dirname, './.env')
 });
 
-
 const connection = mysql.createConnection({
     host: process.env.DBHostAddress ,
     user: process.env.DBUser,

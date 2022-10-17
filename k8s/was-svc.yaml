@@ -17,13 +17,13 @@ spec:
           image: pddana/btcwask8s:latest
           env:
           - name: DBHostAddress
-            value: {DBHostAddress}
+            value: 10.102.252.2
           - name: DBUser
-            value: {DBUser}
+            value: dana
           - name: DBPassword
-            value: {DBPassword}
+            value: Test1234!
           - name: DBName
-            value: {DBName}
+            value: btcweb
           ports:
             - containerPort: 8081
 ---
