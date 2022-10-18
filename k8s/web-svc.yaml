@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: btc-web-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: btc-web-server
+  template:
+    metadata:
+      labels:
+        app: btc-web-server
+    spec:
+      containers:
+        - name: btc-web-server
+          image: pddana/btcwebdocker:v3
+          env:
+          - name: ServerName
+            value: 80.21.23.12
+          - name: WasServer
+            value: 10.103.126.239
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: btc-web-service
+spec:
+  ports:
+    - name: http-port
+      port: 80
+      targetPort: 8081
+  selector:
+    app: btc-web-server
+  type: LoadBalancer
+  externalIPs:
+  - 80.21.23.12
