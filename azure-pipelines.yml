@@ -8,6 +8,44 @@ trigger:
 
 steps:
 
+### Dana-db
+- task: Docker@2
+  displayName: 'Docker Build'
+  inputs:
+    containerRegistry: 'SvcConnAcr'
+    repository: 'white-cicd'
+    command: 'buildAndPush'
+    Dockerfile: 'docker_file/db/Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      db_latest
+
+- task: Docker@2
+  displayName: 'Docker Push'
+  inputs:
+    containerRegistry: 'SvcConnAcr'
+    repository: 'white-cicd'
+    command: 'buildAndPush'
+    Dockerfile: 'docker_file/db/Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      db_latest
+
+- task: Bash@3
+  displayName: 'Tag Update'
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i "s/latest/$(Build.BuildId)/g" k8s/db-svc.yaml'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Build Artifact Publish'
+  inputs:
+    PathtoPublish: 'k8s/db-svc.yaml'
+    ArtifactName: 'dbdrop'
+    publishLocation: 'Container'
+
+
+### Dana-was
 - task: Docker@2
   displayName: 'Docker Build'
   inputs:
@@ -34,11 +72,11 @@ steps:
   displayName: 'Tag Update'
   inputs:
     targetType: 'inline'
-    script: 'sed -i "s/latest/$(Build.BuildId)/g" k8s/deploy-svc.yaml'
+    script: 'sed -i "s/latest/$(Build.BuildId)/g" k8s/was-svc.yaml'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Build Artifact Publish'
   inputs:
-    PathtoPublish: 'k8s/deploy-svc.yaml'
-    ArtifactName: 'drop'
+    PathtoPublish: 'k8s/was-svc.yaml'
+    ArtifactName: 'wasdrop'
     publishLocation: 'Container'
