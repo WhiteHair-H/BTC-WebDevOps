@@ -19,12 +19,15 @@ az acr create \
 # 생성 결과 확인
 az acr list -o table
 
+# acr login
+az acr login -n whiteacrdemo
+
 # 변수 선언
 //AKS_NAME은 각자 고유한 이름으로 할당
 AKS_CLUSTER_NAME=whiteaksdemo
 VNET_NAME=aks-vnet
 SUBNET_NAME=aks-subnet
- 
+
 # VNET 생성
 az network vnet create \
 --resource-group $RESOURCE_GROUP \
@@ -70,7 +73,10 @@ az aks create \
 az aks get-credentials \
 --resource-group $RESOURCE_GROUP \
 --name $AKS_CLUSTER_NAME
- 
+
+# wsl kubectl 입력
+cp -r /mnt/c/Users/dana/.kube/ .
+
 # AKS 노드 정보 확인
 kubectl get node
 

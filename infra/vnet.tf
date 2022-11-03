@@ -3,13 +3,13 @@ resource "azurerm_virtual_network" "Three_Tier_vnet" {
   name                = "Three_Tier_vnet"
   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
   location            = azurerm_resource_group.Three_Tier_rg.location
-  address_space       = ["192.168.0.0/16"]
+  address_space       = ["192.168.0.0/25"]
 }
 
 # Web_subnet
 resource "azurerm_subnet" "Web_subnet" {
   name = "Web_subnet"
-  address_prefixes = ["192.168.10.0/24"]
+  address_prefixes = ["192.168.0.0/28"]
   virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
 }
@@ -17,18 +17,18 @@ resource "azurerm_subnet" "Web_subnet" {
 # Was_subnet
 resource "azurerm_subnet" "Was_subnet" {
   name = "Was_subnet"
-  address_prefixes = ["192.168.20.0/24"]
+  address_prefixes = ["192.168.0.16/28"]
   virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
 }
 
-# # DB_subnet
-# resource "azurerm_subnet" "DB_subnet" {
-#   name = "DB_subnet"
-#   address_prefixes = ["192.168.30.0/24"]
-#   virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
-#   resource_group_name = azurerm_resource_group.Three_Tier_rg.name
-# }
+# DB_subnet
+resource "azurerm_subnet" "DB_subnet" {
+  name = "DB_subnet"
+  address_prefixes = ["192.168.0.32/28"]
+  virtual_network_name = azurerm_virtual_network.Three_Tier_vnet.name
+  resource_group_name = azurerm_resource_group.Three_Tier_rg.name
+}
 
 resource "azurerm_network_security_group" "web_sg" {
   name = "web_sg"
