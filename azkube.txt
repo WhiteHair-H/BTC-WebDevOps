@@ -1,0 +1,154 @@
+resourceSuffix=dana
+locName=koreacentral
+rgName=dana-rg-DevSecOps
+acrName=acrdevsecops${resourceSuffix}
+aksName=aksdevsecops${resourceSuffix}
+
+az group create --name $rgName --location $locName
+
+az network vnet create \
+--resource-group $rgName \
+--name Vnet-DevSecOps \
+--subnet-name Sub-DevSecOps
+
+
+az vm create \
+--resource-group $rgName \
+--name VM-DevSecOps \
+--image UbuntuLTS \
+--admin-username dana \
+--admin-password ~1q2w3e4r5t6y
+
+# ubuntu
+---
+
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu/  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -a -G docker $USER
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+
+
+---
+
+az acr create \
+--name $acrName \
+--resource-group $rgName \
+--sku Standard \
+--admin-enabled true
+
+
+az aks create -n $aksName -g $rgName --node-count 1 --generate-ssh-keys --enable-managed-identity --attach-acr $acrName
+az aks get-credentials -n $aksName -g $rgName
+kubectl get nodes
+
+
+ADO_URL="https://dev.azure.com/Org-jinwoo"
+TOKEN="jgh7mybw2tw3gvy5uwp5gl6tc6w4ktp7wy2cpvpbylq2dsl2bizq"
+POOL_NAME="Agent01"
+AGENT_NAME="agent01"
+
+wget https://vstsagentpackage.azureedge.net/agent/2.206.1/vsts-agent-linux-x64-2.206.1.tar.gz
+mkdir agent01 && cd agent01
+tar zxvf ../vsts-agent-linux-x64-2.206.1.tar.gz
+./config.sh --unattended --url $ADO_URL --auth pat --token $TOKEN --pool $POOL_NAME --agent $AGENT_NAME --acceptTeeEula
+
+
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  #batch: true
+  branches:
+    include:
+    - dev
+
+pool: SHA-agent1
+
+steps:
+- task: Maven@3
+  displayName: 'Maven Build'
+
+- task: Maven@3
+  displayName: 'Maven pom.xml'
+
+- task: Bash@3
+  displayName: 'ACR Login'
+  inputs:
+    targetType: 'inline'
+    script: 'az acr login --name acrdevsecopsdana'
+
+- task: Bash@3
+  displayName: 'Docker Build'
+  inputs:
+    targetType: 'inline'
+    script: 'docker build -f Dockerfile -t Self-Host-PJ:$(Build.BuildId) .'
+
+- task: Bash@3
+  displayName: 'Docker Tag & Push'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker tag Self-Host-PJ:$(Build.BuildId) acrdevsecopsdana.azurecr.io/dana:$(Build.BuildId)
+      docker push acrdevsecopsdana.azurecr.io/dana:$(Build.BuildId)
+
+- task: Bash@3
+  displayName: 'Update variables in $YAML'
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i "s/latest/$(Build.BuildId)/g"'
+
+- task: Bash@3
+  displayName: 'Copy dev YML'
+  inputs:
+    targetType: 'inline'
+    script: cp $YAML /home/korean/agent01/k8syaml/deploy-svc-$(Build.BuildId).yaml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
